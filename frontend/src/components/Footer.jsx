@@ -17,7 +17,7 @@ const Footer = () => {
         </div>
 
         <div className="flex flex-col text-white">
-            <p>Privacy  Policy</p>
+            <p>Privacy Policy</p>
             <p>About Us</p>
             <p>Terms & Conditions</p>
             <p>Terms of Service</p>

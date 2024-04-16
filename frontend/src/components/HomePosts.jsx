@@ -25,8 +25,7 @@ const HomePosts = () => {
            <p className="text-sm md:text-lg">
             Prominent examples of AI software used in everyday life include Google Maps, Netflix, and Siri. These applications use 
             AI to provide personalized recommendations, predict user behavior, and improve the user experience. AI is also used in
-            healthcare, finance, and transportation to automate processes, analyze data, and make predictions. Overall, AI has the
-            potential to transform various industries and improve the quality of life for people around the world.
+            healthcare, finance, and transportation to automate processes, analyze data, and make predictions.
            </p>
         </div>
 

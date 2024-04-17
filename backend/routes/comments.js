@@ -11,8 +11,6 @@ router.post("/create", async (req, res) => {
     const newComment = new Comment(req.body);
     const savedComment = await newComment.save();
     res.status(200).json(savedComment);
-
-
   } catch (err) {
     res.status(200).json(err);
   }
@@ -22,7 +20,6 @@ router.post("/create", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   try {
-    
     const updatedComment = await Comment.findByIdAndUpdate(
       req.params.id,
       { $set: req.body },
@@ -39,26 +36,23 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     await Comment.findByIdAndDelete(req.params.id); //Find and delete user by id
-    
+
     res.status(200).json("Comment has been deleted!");
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-
-
-
 //GET POST COMMENTS
 
 router.get("/post/:postId", async (req, res) => {
-    try {
-      const comments = await Comment.find({postId:req.params.postId}); //Find posts comment
-     
-      res.status(200).json(comments);
-    } catch (err) {
-      res.status(500).json(err);
-    }
-  });
+  try {
+    const comments = await Comment.find({ postId: req.params.postId }); //Find posts comment
 
-  
+    res.status(200).json(comments);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+module.exports = router;

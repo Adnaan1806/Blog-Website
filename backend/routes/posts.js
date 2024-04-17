@@ -11,8 +11,6 @@ router.post("/create", async (req, res) => {
     const newPost = new Post(req.body);
     const savedPost = await newPost.save();
     res.status(200).json(savedPost);
-
-
   } catch (err) {
     res.status(200).json(err);
   }
@@ -22,7 +20,6 @@ router.post("/create", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   try {
-    
     const updatedUser = await Post.findByIdAndUpdate(
       req.params.id,
       { $set: req.body },
@@ -39,7 +36,7 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     await Post.findByIdAndDelete(req.params.id); //Find and delete user by id
-    
+
     res.status(200).json("Post has been deleted!");
   } catch (err) {
     res.status(500).json(err);
@@ -51,41 +48,40 @@ router.delete("/:id", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id); //Find post by id
-   
+
     res.status(200).json(post);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-
 //GET POSTS
 
 router.get("/", async (req, res) => {
-    try {
-      const posts = await Post.find(); //Find posts
-     
-      res.status(200).json(posts);
-    } catch (err) {
-      res.status(500).json(err);
-    }
-  });
+  const query = req.query;
 
-  //GET USER POSTS
+  try {
+    const searchFilter = {
+      title: { $regex: query.search, $options: "i" },
+    };
+    const posts = await Post.find(query.search ? searchFilter : null); //Find posts
+
+    res.status(200).json(posts);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+//GET USER POSTS
 
 router.get("/user/:userId", async (req, res) => {
-    try {
-      const posts = await Post.find({userId:req.params.userId}); //Find posts by userId
-     
-      res.status(200).json(posts);
-    } catch (err) {
-      res.status(500).json(err);
-    }
-  });
+  try {
+    const posts = await Post.find({ userId: req.params.userId }); //Find posts by userId
 
-
-
-  
- 
+    res.status(200).json(posts);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
 module.exports = router;

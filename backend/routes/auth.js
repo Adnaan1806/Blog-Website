@@ -39,7 +39,7 @@ router.post("/login", async (req, res) => {
       return res.status(401).json("Wrong password");
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.SECRET, {
+    const token = jwt.sign({ id: user._id,username:user.username,email:user.email }, process.env.SECRET, {
       expiresIn: "3d",
     });
 
@@ -61,6 +61,18 @@ router.get("/logout", (req, res) => {
     catch(err){
         res.status(500).json(err)
     }
+})
+
+//REFETCH USER
+
+router.get("/refetch", async (req, res) => {
+  const token = req.cookies.token;
+  jwt.verify(token,process.env.SECRET,{},async (err,data)=>{
+    if(err){
+      return res.status(404).json(err)
+    }
+    res.status(200).json(data)
+  })
 })
 
 module.exports = router;

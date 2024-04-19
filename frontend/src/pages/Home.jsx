@@ -6,6 +6,7 @@ import { URL } from "../url";
 import { useEffect } from "react"
 import { useState } from "react"
 import { useLocation } from "react-router-dom";
+import Loader from "../components/Loader";
 
 
 const Home = () => {
@@ -15,8 +16,10 @@ const Home = () => {
 
   const [posts, setPosts] = useState([])
   const [noResults,setNoResults] = useState(false)
+  const [loader, setLoader] = useState(false)
 
 const fetchPosts = async () => {
+  setLoader(true)
     try {
       const res = await axios(URL+"/api/posts/"+search)
       // console.log(res.data)
@@ -28,9 +31,10 @@ const fetchPosts = async () => {
         setNoResults(false)
       }
 
-      setPosts(res.data)
+      setLoader(false)
     } catch (err) {
       console.log(err);
+      setLoader(true)
     }
 }
 
@@ -42,7 +46,7 @@ useEffect(()=>{
     <>
     <Navbar/>
     <div className="px-8 md:px-[200px] min-h-[80vh]">
-        {!noResults?posts.map((post)=>(
+        {loader?<div className="h-[40vh] flex justify-center items-center"><Loader/></div>:!noResults?posts.map((post)=>(
             <HomePosts key={post._id} post={post}/>
         )):<h3 className="text-center font-bold mt-16">No posts Available</h3>}
     </div>

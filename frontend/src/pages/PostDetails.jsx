@@ -4,7 +4,7 @@ import { BiEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import logo from "../assets/growtika-nGoCBxiaRO0-unsplash.jpg";
 import Comment from "../components/Comment";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
 import { URL } from "../url";
@@ -20,6 +20,7 @@ const PostDetails = () => {
   const [post,setPost] = useState({})
   const{user} = useContext(UserContext);
   const [loader, setLoader] = useState(false)
+  const navigate = useNavigate()
 
 const fetchPost = async()=>{
   setLoader(true)
@@ -34,6 +35,20 @@ const fetchPost = async()=>{
     setLoader(true)
   }
 }
+
+
+const handleDeletePost = async ()=>{
+  try{
+      const res = await axios.delete(URL + "/api/posts/"+postId,{withCredentials:true})
+      console.log(res.data)
+      navigate("/")
+
+  }
+  catch(err){
+    console.log(err)
+  }
+}
+
 
 useEffect(()=>{
 
@@ -50,10 +65,10 @@ useEffect(()=>{
             {post.title}
           </h1>
           {user?._id===post?.userId && <div className="flex items-center justify-center space-x-2">
-            <p>
+            <p className="cursor-pointer" onClick={()=>navigate("/edit/"+postId)}>
               <BiEdit />
             </p>
-            <p>
+            <p className="cursor-pointer" onClick={handleDeletePost}>
               <MdDelete />
             </p>
           </div>}

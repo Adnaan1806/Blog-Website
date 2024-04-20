@@ -1,4 +1,4 @@
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { FaBars } from "react-icons/fa";
 import { useState } from "react";
@@ -12,6 +12,8 @@ const Navbar = () => {
 
   const [menu, setMenu] = useState(false);
   const navigate = useNavigate()
+  const path = useLocation().pathname
+  
   // console.log(prompt)
 
   const showMenu = () => {
@@ -27,7 +29,7 @@ const Navbar = () => {
         <Link to="/">Blog App</Link>
       </h1>
 
-      <div className="flex justify-center items-center space-x-0">
+      {path==="/" && <div className="flex justify-center items-center space-x-0">
         <p onClick={()=>navigate(prompt?"?search="+prompt:navigate("/"))} className="cursor-pointer">
           <BsSearch />
         </p>
@@ -37,7 +39,7 @@ const Navbar = () => {
           placeholder="Search a post"
           className="outline-none px-3"
         />
-      </div>
+      </div>}
 
       <div className="hidden md:flex items-center justify-center space-x-4 md:space-x-4">
         {user ? (

@@ -4,6 +4,8 @@ const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+
+
 //REGISTER
 
 router.post("/register", async (req, res) => {
@@ -39,9 +41,13 @@ router.post("/login", async (req, res) => {
       return res.status(401).json("Wrong password");
     }
 
-    const token = jwt.sign({ _id: user._id,username:user.username,email:user.email }, process.env.SECRET, {
-      expiresIn: "3d",
-    });
+    const token = jwt.sign(
+      { _id: user._id, username: user.username, email: user.email },
+      process.env.SECRET,
+      {
+        expiresIn: "3d",
+      }
+    );
 
     const { password, ...info } = user._doc;
 
@@ -54,25 +60,26 @@ router.post("/login", async (req, res) => {
 //LOGOUT
 
 router.get("/logout", (req, res) => {
-    try{
-        res.clearCookie("token",{sameSite:"none",secure:true}).status(200).send("Logged out Successfully")
-
-    }
-    catch(err){
-        res.status(500).json(err)
-    }
-})
+  try {
+    res
+      .clearCookie("token", { sameSite: "none", secure: true })
+      .status(200)
+      .send("Logged out Successfully");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
 //REFETCH USER
 
 router.get("/refetch", async (req, res) => {
   const token = req.cookies.token;
-  jwt.verify(token,process.env.SECRET,{},async (err,data)=>{
-    if(err){
-      return res.status(404).json(err)
+  jwt.verify(token, process.env.SECRET, {}, async (err, data) => {
+    if (err) {
+      return res.status(404).json(err);
     }
-    res.status(200).json(data)
-  })
-})
+    res.status(200).json(data);
+  });
+});
 
 module.exports = router;

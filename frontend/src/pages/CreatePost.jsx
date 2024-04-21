@@ -15,8 +15,8 @@ const CreatePost = () => {
   const [cat, setCat] = useState("");
   const [cats, setCats] = useState([]);
   const { user } = useContext(UserContext);
-  const navigate = useNavigate()
- 
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
 
   const addCategory = () => {
     let updateCats = [...cats];
@@ -33,12 +33,28 @@ const CreatePost = () => {
 
   const handleCreate = async (e) => {
     e.preventDefault();
-    
+
+    if (!title.trim() || !description.trim()) {
+      setError("Title and Description are required to create a Post"); 
+      return;
+    }
+
+    if (!title.trim()) {
+      setError("Title is required"); 
+      return;
+    }
+
+    if (!description.trim()) {
+      setError("Description is required"); 
+      return;
+    }
+
+
     const post = {
       title,
       description,
-      username:user.username,
-      userId:user._id,
+      username: user.username,
+      userId: user._id,
       categories: cats,
     };
 
@@ -48,13 +64,12 @@ const CreatePost = () => {
       data.append("img", filename);
       data.append("file", file);
       post.photo = filename;
-      console.log(data)
+      console.log(data);
 
       //image upload
       try {
         const imgUpload = await axios.post(URL + "/api/upload", data);
         // console.log(imgUpload.data);
-        
       } catch (err) {
         console.log(err);
       }
@@ -66,7 +81,7 @@ const CreatePost = () => {
       const res = await axios.post(URL + "/api/posts/create", post, {
         withCredentials: true,
       });
-      navigate("/posts/post/"+res.data._id);
+      navigate("/posts/post/" + res.data._id);
       // console.log(res.data);
     } catch (err) {
       console.log(err);
@@ -80,6 +95,8 @@ const CreatePost = () => {
         <h1 className="font-bold md:text-2xl text-xl">Create a new post</h1>
 
         <form className="w-full flex flex-col space-y-4 md:space-y-8 mt-4">
+        {error && <div className="text-red-500 font-bold text-lg">{error}</div>}
+
           <input
             onChange={(e) => setTitle(e.target.value)}
             type="text"

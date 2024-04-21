@@ -14,6 +14,34 @@ const Register = () => {
 
   const handleRegister = async () => {
     try {
+
+      if (!username.trim()) {
+        setError("Username is required");
+        return;
+      }
+  
+      if (!email.trim()) {
+        setError("Email is required");
+        return;
+      }
+  
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        setError("Please enter a valid email address");
+        return;
+      }
+  
+      if (!password.trim()) {
+        setError("Password is required");
+        return;
+      }
+  
+      if (password.length < 6) {
+        setError("Password must be at least 6 characters long");
+        return;
+      }
+
       const res = await axios.post(URL + "/api/auth/register", {
         username,
         email,
@@ -34,7 +62,7 @@ const Register = () => {
     <>
       <div className="flex items-center justify-between px-6 md:px-[200px] py-4">
         <h1 className="text-lg md:text-xl font-extrabold">
-          <Link to="/">Blog App</Link>
+          <Link to="/">Master Blow</Link>
         </h1>
         <h3>
           <Link to="/login">Login</Link>
@@ -69,7 +97,7 @@ const Register = () => {
             Register
           </button>
           {error && (
-            <h3 className="text-red-500 text-sm">Something went wrong</h3>
+            <h3 className="text-red-500 text-sm">{error}</h3>
           )}
           <div className="flex justify-center items-center space-x-2">
             <p>Already have an account?</p>

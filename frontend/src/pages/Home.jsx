@@ -60,7 +60,7 @@ useEffect(()=>{
           </>
           
             
-        )):<h3 className="text-center font-bold mt-16">No posts Available</h3>}
+        )):<h3 className="text-center mt-16 text-red-500 font-bold text-lg">No posts Available</h3>}
     </div>
     <Footer/>
     </>
